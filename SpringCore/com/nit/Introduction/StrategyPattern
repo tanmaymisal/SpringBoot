@@ -1,0 +1,35 @@
+The target and dependent classes of Dependency Management can be designed 
+by using the following principles of strategy DP
+==========================================================================
+
+Rule/Principle 1 -> Favour Composition (HAS-A Relation) over Inheritance (IS-A Relation)
+
+
+
+=================================================================================================================================
+Rule/Principle 2 -> Always code to interfaces/abstract classes i.e do not code to concrete classes to
+achieve the loose coupling in the implementaion of Dynamic Polymorphism.
+      
+      Problem : if target class having multiple possible dependent classes then the code tightly coupled code
+        if we take dependent class type HAS-A property in target class.
+        
+      Solution : Make all the possible dependent classes implementing the common interface and take that interface
+        type HAS-A property having setter method for that property in target class tomale the code as loosely coupled code.
+        
+       
+==================================================================================================================================
+Rule/Principle 3-> our code must be open for extenstion and must be close for modification 
+
+       Making all the possible dependent classes impllementing the common interface makes
+       our code open for extention because we can more dependent classes by implementing that interface
+       
+       eg: we can add more dependent classes petrolEngine,dieselEngine implementing the common interface (Engine)
+       
+       Either by taking the classes as the final classes or by taking the method as final methods we can make out code
+       closed for Modification
+       
+       note1:: FInal classes can not have sub classes so code of the class can not be modified
+       note2 :: Final methods of super class can not overridden in the syp classes so the code of the methods can 
+       not be modified
+       
+       Afterimplementing rule1 and rule2 perfectly by just doing small modificaions this rule3 can be implemented.
