@@ -1,0 +1,24 @@
+We can make our IOC container to keep Spring bean class object in different scopes
+
+The spring bean scopes in 6x version are
+1. singleton(Default)   -|----> In standalone apps we can keep the data in the following scopes   
+2. prototype            -|      a) Block Scope b) method/local scopec c) instance scope d) class scope e)applicatio scope 
+
+3. request               |
+4. session               |----> In web Application of java we can keep data in the following scopes
+5. application		     |      a) request b) session c) page d) application scope
+6. websocket			 |
+
+Note : webservices app (resful app) = web Application++
+
+
+=> To specify the spring bean scope we use "scope" attribute of <bean> tag in xml  driven configurations(Not so imp)
+          <bean id="wmg" scope="singleton" class="com.nit.sbeans.WishMessageGenerator">
+          .....
+          .....
+          </bean>
+          
+=> To specify the spring bean scope we use @Scope annotation in annotation driven configurations (required)
+      @Scope is class level, method level annotation ie it can be applied on the top of class and on the top of the method
+      
+      We generally use @scope annotation along with @Componenet annotation and along with @Bean annotation
