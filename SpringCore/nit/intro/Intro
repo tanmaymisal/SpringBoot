@@ -1,0 +1,16 @@
+The IOC Container creates separate object for Spring bean class for every ctx.getBean() method call 
+and that spring class object will not be placed in the internal cache of IOC container
+
+If the spring bean class obj state is changing time to time then it is recomended to take the scope
+as the "prototype" scope so that for every data change one new obj will be created for the spring 
+bean
+
+@Lazy(true) is application only for the singleton scope spring beans to disable the pre/eager instantiation
+on singleton scope spring bean 
+@Lazy(true) does not give effect on other scope spring beans becoz they are always enable with lazy instantation
+
+
+if the spring bean scope is "prototype" the spring  bean class obj ref will not be placed in the internal cache of the
+IOC container,So ctx.getBean() does not find prototype scope spring bean
+class obj ref in the internal cache of the IOC container hence it creates new object for every
+ctx.getBean() method call
