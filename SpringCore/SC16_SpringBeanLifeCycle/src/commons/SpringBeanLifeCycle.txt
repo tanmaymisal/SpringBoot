@@ -1,0 +1,138 @@
+Spring Bean life cycle
+=======================
+
+Life cycle means keeping track of all activites from birth to death(object creation to object destruction)
+IOC container manages the spring bean life cycle 
+servlet container manages the servlet comp life cycle
+JSP container manages the jsp
+
+
+The action raised on the component or object in the life cycle of comp is called life cycle event 
+
+Servlet comp life cycle events are
+    
+   => instantiation events (raise when the servlet container creates our comp class object)
+   => Request processing event (raises when the servlet container keeps our servlet component ready 
+                             process the request when it gets the request from client app)
+   => Destruction events (Raises when the servlet container is about to destroy our servlet component class objects)
+    
+    
+    
+Spring Bean life cycle events are
+    => instatiation event (init-events) [raises when the IOC container creates the spring bean class object
+                                      and complete all types of injections on that object]
+                                      
+    => Destruction event (destroy-event) [raises when the IOC container is about to destroy our Spring Bean class object]                                  
+ 
+ =========================================================================================================================================
+ 
+ The method that is called by underlying container automatically when the life cycle event is raised all called 
+ Life cycle events handling method or life cycle method 
+ We generally  place event handling logics in life cycle event handling method definations in our choice components
+ 
+ 
+ [ NOTE : The life cycle methods are called call back methods becoz we do not call them
+ i.e they will be called by underlying container automatically based on the life cycle 
+ events that are raised ] 
+ 
+ ==========================================================================================================================================
+ Servlet Components life cycle methods are 
+  
+           LIFE cycle event            Life cycle method                         Logics to Execute 
+ a. For instatiation event ---------> init(Servlet Config cg) method ------> we place servlet initialization logics in this method 
+ 																			like creating jdbc connection obj and etc						
+ 
+ b. Request Processing event -------> service(ServletRequest req, --------->We place request processing logics and response genetation
+ 									  ServletResponce res) method           logics in this method
+ 
+ c. Destruction event -------------->           destroy()   ---------------> We place logics to release non-java resources associated
+                                      										with the sevlet Componet (Closing jdbc connection)
+                                      										
+=========================================================================================================================================                             										)             
+
+ Servlet Comp is invasive component (tightly coupled) [class must implement javax.servlet.Servlet(I) direclty OR indirectly ] 
+ So the servlet life cycle methods are pre - defined methods with fixed signatures
+ 
+ spring bean life cycle method names are not fixed becoz spring beans  can be developed as NON - Invasive classes
+         ** Most of the times we prefer taking spring beans as the non invasive classses.
+         
+ IN Spring bean life cycle configurations we need to configure life cycle meethods EXPLICITLY either using 
+ xml(BAD) configurations Or using Annotation configurations(Good)
+ 
+ 
+ Life Cycle methods in spring bean are 
+     life cycle  event         	life cycle method 
+ a. instantiation event --->  custom init method (Method with any name)
+                              
+ b. Destruction event -----> custom destroy method (Method with any name)
+ 
+ 
+ 
+ *a. instantiation event Logic to Execute :
+                          ------------------
+         => To initialize left over properties of spring bean class that are not participating in any king of injections
+         => To check wheather important spring bean properties injected with valid values or not
+ 
+ *b. Destruction event Logic to Execute :
+					   ------------------         
+         => To nullify spring bean properties assignment with 0 or 0.0/null/or false
+         => To release non java resources associated with Spring beans like closing jdbc con closing 
+         IO streams and etc...
+         
+ NOTE : the spring bean life cycle methods are one time executing blocks
+      : the Spring bean init life cycle method will be called by IOC container when the IOC container creates the spring
+        Bean class obj and also completes the all kinds of injections on that obj
+      : the spring bean destroy life cycle method, when the IOC container is about to destroy our Spring bean class obj.
+      
+         
+   THE STANDARD SIGNATURE OF CUSTOM INIT, CUSTOM DESTROY METHODS OF SPRING BEAN LIFE CYCLE
+   
+   public void <method  name> (no params)
+   				-------------
+   					 |-----------> any name can be taken as the method name						
+   {
+       ........
+       ........
+   }      
+   
+ ================================================================================================================================
+   
+   Different approaches of Spring bean life cycle programming
+   ----------------------------------------------------------
+  a. Declarative approach (XML cnfgs) [Here the custome init and Destroy methods will be configured with xml cfgs] {BAD becoz of xml}
+     (Allows invasive spring bean)
+     => Here life cycle method names are custom names   
+  b. Programatic Approach (Using interface implementation)[BAD becoz ]
+    =>  Here life cycle method names are fixed becoz they are taken from 
+        implemented spring api interfaces (InitializingBean(I), DisposibleBean (I))
+        
+  c. Annotation cnfgs Approach (using jdk supplied annotations like @PostConstruct and @PreDestroy)
+     (Allows invasive spring bean)
+     => Here the life cycle method names are custom names having annotations
+     
+     => @PostConstruct to configure the java method are the init life cycle method
+     => @PreDestroy to configure the java method as the destroy life cycle method
+ 
+==================================================================================================================================
+
+Spring Bean life cycle Management using the Annotation driven configurations
+
+In this approach we need to use :
+@PostConstruct  --> To cfgs init life cycle method (custom method)
+@PreDestroy --> To cfgs destroy life cycle method (custom method)
+
+The annotations that are given by jdk API's,JEE API's and implemented in different frameworks and technologies by providing 
+the functionalities are called Java Config Annotations
+These annotations  are very useful to make our java classes code as more non-invasive and more loosely coupled code
+e.g. @PostConstruct @PreDestroy @Inject @Resource and etc....
+
+==> Initially these two annotations are available in jdk s/w (upto 1.8 java-8 version)
+==> from jdk 1.9 (java 9) it is given in a separate jar file that is jakarta.annotation-api-<ver>.jar file
+
+In the init life cycle method we need to place initialization logic for left over properties that are not 
+participating in the injections... and we can also place the validation logics checking whether important
+properties are injected with correct values or not.
+
+In the destroy life cycle , we generally place the nullification logics of the bean properties and logic to release 
+non-java resource associated with spring bean class object (like DB connections)
+     
